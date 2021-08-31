@@ -37,7 +37,9 @@ class HomeView extends GetView<HomeController> {
             child: Container(
               margin: EdgeInsets.only(top: context.mediaQueryPadding.top),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Colors.black38)),
+                border: Border(
+                  bottom: BorderSide(color: Colors.black38),
+                ),
               ),
               padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
               child: Row(
@@ -49,8 +51,8 @@ class HomeView extends GetView<HomeController> {
                   ),
                   Material(
                     color: Colors.red[900],
+                    borderRadius: BorderRadius.circular(50),
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(50),
                       onTap: () => Get.toNamed(Routes.PROFILE),
                       child: Padding(
                         padding: const EdgeInsets.all(5),
