@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 import 'app/utils/loading_screen.dart';
 import 'app/utils/error_screen.dart';
+import 'app/utils/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,10 +25,19 @@ class MyApp extends StatelessWidget {
           return ErrorScreen();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return GetMaterialApp(
-            title: "Chat App",
-            initialRoute: AppPages.INITIAL,
-            getPages: AppPages.routes,
+          return FutureBuilder(
+            future: Future.delayed(Duration(seconds: 3)),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return GetMaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: "Chat App",
+                  initialRoute: AppPages.INITIAL,
+                  getPages: AppPages.routes,
+                );
+              }
+              return SplashScreen();
+            },
           );
         }
         return LoadingScreen();

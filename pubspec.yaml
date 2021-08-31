@@ -2,21 +2,26 @@ name: chat
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment:
+environment: 
   sdk: '>=2.12.0 <3.0.0'
 
-dependencies:
+dependencies: 
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.1.0
   firebase_core: 1.6.0
-  flutter:
-    sdk: flutter
   get: 4.3.8
   google_sign_in: ^5.0.7
-
-dev_dependencies:
-  flutter_test:
+  lottie: 1.1.0
+  flutter: 
     sdk: flutter
 
-flutter:
+dev_dependencies: 
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
   uses-material-design: true
+  assets:
+    - assets/logo/
+    - assets/lottie/
+
