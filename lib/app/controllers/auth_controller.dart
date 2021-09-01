@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:chat/app/routes/app_pages.dart';
@@ -12,7 +13,41 @@ class AuthController extends GetxController {
   GoogleSignInAccount? _currentUser;
   UserCredential? _userCredential;
 
-  void login() async {
+  Future<void> firstInitialized() async {
+    await autoLogin().then((value) {
+      if (value) {
+        isAuth.value = true;
+      }
+    });
+    await skipIntro().then((value) {
+      if (value) {
+        isSkipIntro.value = true;
+      }
+    });
+  }
+
+  Future<bool> autoLogin() async {
+    try {
+      final isSignIn = await _googleSignIn.isSignedIn();
+      if (isSignIn) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
+
+  Future<bool> skipIntro() async {
+    final box = GetStorage();
+    if (box.read("skipIntro") != null && box.read("skipIntro") == true) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> login() async {
     try {
       await _googleSignIn.signOut();
       await _googleSignIn.signIn().then((value) => _currentUser = value);
@@ -27,6 +62,13 @@ class AuthController extends GetxController {
         await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) => _userCredential = value);
+
+        final box = GetStorage();
+        if (box.read("skipIntro") != null) {
+          box.remove("skipIntro");
+        }
+        box.write("skipIntro", true);
+
         isAuth.value = true;
         Get.offAllNamed(Routes.HOME);
       } else {
@@ -38,6 +80,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
+    await _googleSignIn.disconnect();
     await _googleSignIn.signOut();
     Get.offAllNamed(Routes.LOGIN);
   }
