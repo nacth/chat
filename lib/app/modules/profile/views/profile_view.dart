@@ -41,33 +41,33 @@ class ProfileView extends GetView<ProfileController> {
                   endRadius: 110,
                   glowColor: Colors.black,
                   duration: Duration(seconds: 2),
-                  child: ClipRRect(
-                    child: Container(
-                      margin: EdgeInsets.all(15),
-                      width: 175,
-                      height: 175,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(200),
-                        child: authC.user.photoUrl == "noimage"
-                            ? Image.asset("assets/logo/noimage.png")
-                            : Image.network(
-                                authC.user.photoUrl!,
-                                fit: BoxFit.fill,
-                              ),
-                      ),
+                  child: Container(
+                    margin: EdgeInsets.all(15),
+                    width: 175,
+                    height: 175,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(200),
+                      child: authC.user.value.photoUrl == "noimage"
+                          ? Image.asset("assets/logo/noimage.png")
+                          : Image.network(
+                              authC.user.value.photoUrl!,
+                              fit: BoxFit.fill,
+                            ),
                     ),
                   ),
                 ),
-                Text(
-                  "${authC.user.name}",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => Text(
+                    "${authC.user.value.name}",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 Text(
-                  "${authC.user.email}",
+                  "${authC.user.value.email}",
                   style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                 ),

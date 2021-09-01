@@ -1,3 +1,4 @@
+import 'package:chat/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:avatar_glow/avatar_glow.dart';
@@ -5,8 +6,12 @@ import 'package:avatar_glow/avatar_glow.dart';
 import '../controllers/change_profile_controller.dart';
 
 class ChangeProfileView extends GetView<ChangeProfileController> {
+  final authC = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
+    controller.emailC.text = authC.user.value.email as String;
+    controller.nameC.text = authC.user.value.name as String;
+    controller.statusC.text = authC.user.value.status as String;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -18,7 +23,10 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => authC.changeProfile(
+              controller.nameC.text,
+              controller.statusC.text,
+            ),
             icon: Icon(Icons.save),
           ),
         ],
@@ -35,17 +43,22 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 margin: EdgeInsets.all(15),
                 width: 120,
                 height: 120,
-                decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(100),
-                    image: DecorationImage(
-                        image: AssetImage("assets/logo/noimage.png"),
-                        fit: BoxFit.cover)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(200),
+                  child: authC.user.value.photoUrl == "noimage"
+                      ? Image.asset("assets/logo/noimage.png")
+                      : Image.network(
+                          authC.user.value.photoUrl!,
+                          fit: BoxFit.fill,
+                        ),
+                ),
               ),
             ),
             SizedBox(height: 20),
             TextField(
               controller: controller.emailC,
+              readOnly: true,
+              textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
               decoration: InputDecoration(
                 labelText: "Email",
@@ -68,6 +81,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
             SizedBox(height: 10),
             TextField(
               controller: controller.nameC,
+              textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
               decoration: InputDecoration(
                 labelText: "Name",
@@ -90,6 +104,13 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
             SizedBox(height: 10),
             TextField(
               controller: controller.statusC,
+              textInputAction: TextInputAction.done,
+              onEditingComplete: () {
+                authC.changeProfile(
+                  controller.nameC.text,
+                  controller.statusC.text,
+                );
+              },
               cursorColor: Colors.black,
               decoration: InputDecoration(
                 labelText: "Status",
@@ -132,7 +153,10 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
             Container(
               width: Get.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () => authC.changeProfile(
+                  controller.nameC.text,
+                  controller.statusC.text,
+                ),
                 child: Text(
                   "UPDATE",
                   style: TextStyle(
