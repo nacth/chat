@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -12,6 +13,8 @@ class AuthController extends GetxController {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _currentUser;
   UserCredential? _userCredential;
+
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> firstInitialized() async {
     await autoLogin().then((value) {
@@ -51,6 +54,7 @@ class AuthController extends GetxController {
     try {
       await _googleSignIn.signOut();
       await _googleSignIn.signIn().then((value) => _currentUser = value);
+
       final isSignIn = await _googleSignIn.isSignedIn();
       if (isSignIn) {
         print("200");
@@ -59,6 +63,7 @@ class AuthController extends GetxController {
           idToken: googleAuth?.idToken,
           accessToken: googleAuth?.accessToken,
         );
+
         await FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((value) => _userCredential = value);
@@ -68,6 +73,20 @@ class AuthController extends GetxController {
           box.remove("skipIntro");
         }
         box.write("skipIntro", true);
+
+        CollectionReference users = firestore.collection("users");
+        users.doc(_currentUser?.email).set({
+          "uid": _userCredential?.user?.uid,
+          "name": _currentUser?.displayName,
+          "email": _currentUser?.email,
+          "photoUrl": _currentUser?.photoUrl,
+          "status": "",
+          "createdAt":
+              _userCredential?.user?.metadata.creationTime?.toIso8601String(),
+          "lastSignInTime":
+              _userCredential?.user?.metadata.lastSignInTime?.toIso8601String(),
+          "updatedTime": DateTime.now().toIso8601String(),
+        });
 
         isAuth.value = true;
         Get.offAllNamed(Routes.HOME);
