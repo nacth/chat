@@ -1,18 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class SearchController extends GetxController {
-  final count = 0.obs;
+  late TextEditingController searchC;
+
   @override
   void onInit() {
+    searchC = TextEditingController();
     super.onInit();
   }
 
   @override
-  void onReady() {
-    super.onReady();
+  void onClose() {
+    searchC.dispose();
+    super.onClose();
   }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }
