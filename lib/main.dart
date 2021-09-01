@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return FutureBuilder(
-            future: Future.delayed(Duration(seconds: 3)),
+            future: Future.delayed(Duration(seconds: 0)),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Obx(
