@@ -99,7 +99,10 @@ class SearchView extends GetView<SearchController> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   trailing: GestureDetector(
-                    onTap: () => Get.toNamed(Routes.CHAT_ROOM),
+                    onTap: () {
+                      authC.addNewConnection(
+                          controller.userSearch[index]["email"]);
+                    },
                     child: Chip(
                       label: Text("Message"),
                     ),
