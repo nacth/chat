@@ -34,10 +34,6 @@ class SearchController extends GetxController {
         print(queryAll);
         queryAll.forEach((element) {
           if (element["name"].startsWith(capitalized)) {
-<<<<<<< HEAD
-=======
-            print("cok");
->>>>>>> bffbdf06332ffb070e89dfdf20899732acc902a4
             tempSearch.add(element);
           }
         });
