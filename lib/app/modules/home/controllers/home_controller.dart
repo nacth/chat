@@ -1,18 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  @override
-  void onReady() {
-    super.onReady();
+  Stream<DocumentSnapshot<Map<String, dynamic>>> chatStream(String email) {
+    return firestore.collection("users").doc(email).snapshots();
   }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 }
