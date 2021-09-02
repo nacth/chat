@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:chat/app/routes/app_pages.dart';
 import '../controllers/search_controller.dart';
 
 class SearchView extends GetView<SearchController> {
