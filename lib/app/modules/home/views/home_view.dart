@@ -60,28 +60,96 @@ class HomeView extends GetView<HomeController> {
                   return ListView.builder(
                     padding: EdgeInsets.zero,
                     itemCount: allChats.length,
-                    itemBuilder: (context, index) => ListTile(
-                      onTap: () => Get.toNamed(Routes.CHAT_ROOM),
-                      leading: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.black26,
-                        child: Image.asset(
-                          "assets/logo/noimage.png",
-                          fit: BoxFit.cover,
+                    itemBuilder: (context, index) {
+                      return StreamBuilder<
+                          DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: controller.friendStream(
+                          allChats[index]["connection"],
                         ),
-                      ),
-                      title: Text(
-                        "Person ${index + 1}",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Text(
-                        "Status ${index + 1}",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      trailing: Chip(label: Text("3")),
-                    ),
+                        builder: (context, snapshot2) {
+                          if (snapshot2.connectionState ==
+                              ConnectionState.active) {
+                            var data = snapshot2.data!.data();
+                            return data!["status"] == ""
+                                ? ListTile(
+                                    onTap: () => Get.toNamed(Routes.CHAT_ROOM),
+                                    leading: CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.black26,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: data["photoUrl"] == "noimage"
+                                            ? Image.asset(
+                                                "assets/logo/noimage.png",
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.network(
+                                                data["photoUrl"],
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "${data["name"]}",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    trailing:
+                                        allChats[index]["total_unread"] == 0
+                                            ? SizedBox()
+                                            : Chip(
+                                                label: Text(
+                                                    "${allChats[index]["total_unread"]}"),
+                                              ),
+                                  )
+                                : ListTile(
+                                    onTap: () => Get.toNamed(Routes.CHAT_ROOM),
+                                    leading: CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.black26,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: data["photoUrl"] == "noimage"
+                                            ? Image.asset(
+                                                "assets/logo/noimage.png",
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.network(
+                                                data["photoUrl"],
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "${data["name"]}",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    subtitle: Text(
+                                      "${data["status"]}",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    trailing:
+                                        allChats[index]["total_unread"] == 0
+                                            ? SizedBox()
+                                            : Chip(
+                                                label: Text(
+                                                    "${allChats[index]["total_unread"]}"),
+                                              ),
+                                  );
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      );
+                    },
                   );
                 }
                 return Center(
