@@ -6,19 +6,19 @@ class SearchController extends GetxController {
   late TextEditingController searchC;
 
   var queryAll = [].obs;
-  var tempSearch = [].obs;
+  var userSearch = [].obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   void searchFriend(String data) async {
     if (data.length == 0) {
       queryAll.value = [];
-      tempSearch.value = [];
+      userSearch.value = [];
     } else {
       var capitalized = data.substring(0, 1).toUpperCase() + data.substring(1);
       if (queryAll.length == 0 && data.length == 1) {
-        CollectionReference temp = await firestore.collection("temp");
-        final keyNameResult = await temp
+        CollectionReference user = await firestore.collection("users");
+        final keyNameResult = await user
             .where("keyName", isEqualTo: data.substring(0, 1).toUpperCase())
             .get();
 
@@ -30,17 +30,17 @@ class SearchController extends GetxController {
       }
 
       if (queryAll.length != 0) {
-        tempSearch.value = [];
+        userSearch.value = [];
         print(queryAll);
         queryAll.forEach((element) {
           if (element["name"].startsWith(capitalized)) {
-            tempSearch.add(element);
+            userSearch.add(element);
           }
         });
       }
     }
     queryAll.refresh();
-    tempSearch.refresh();
+    userSearch.refresh();
   }
 
   @override

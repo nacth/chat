@@ -1,0 +1,26 @@
+{
+    "connections": [
+        "",
+        ""
+    ],
+    "total_chats": 0,
+    "total_read": 0,
+    "total_unread": 0,
+    "chat": [
+        {
+            "sender": "",
+            "recipient": "",
+            "message": "",
+            "time": "",
+            "isRead": true
+        },
+        {
+            "sender": "",
+            "recipient": "",
+            "message": "",
+            "time": "",
+            "isRead": true
+        }
+    ],
+    "lastTime": ""
+}

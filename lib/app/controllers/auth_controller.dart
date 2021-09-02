@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:chat/app/routes/app_pages.dart';
-import 'package:chat/app/data/models/user_model.dart';
+import 'package:chat/app/data/models/users_model.dart';
 
 class AuthController extends GetxController {
   var isSkipIntro = false.obs;
@@ -15,7 +15,7 @@ class AuthController extends GetxController {
   GoogleSignInAccount? _currentUser;
   UserCredential? _userCredential;
 
-  var user = UserModel().obs;
+  var user = UsersModel().obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -62,9 +62,10 @@ class AuthController extends GetxController {
         final currUser = await users.doc(_currentUser?.email).get();
         final currUserData = currUser.data() as Map<String, dynamic>;
 
-        user(UserModel(
+        user(UsersModel(
           uid: currUserData["uid"],
           name: currUserData["name"],
+          keyName: currUserData["keyName"],
           email: currUserData["email"],
           photoUrl: currUserData["photoUrl"],
           status: currUserData["status"],
@@ -121,6 +122,7 @@ class AuthController extends GetxController {
           users.doc(_currentUser?.email).set({
             "uid": _userCredential?.user?.uid,
             "name": _currentUser?.displayName,
+            "keyName": _currentUser?.displayName?.substring(0, 1).toUpperCase(),
             "email": _currentUser?.email,
             "photoUrl": _currentUser?.photoUrl ?? "noimage",
             "status": "",
@@ -140,9 +142,10 @@ class AuthController extends GetxController {
         final currUser = await users.doc(_currentUser?.email).get();
         final currUserData = currUser.data() as Map<String, dynamic>;
 
-        user(UserModel(
+        user(UsersModel(
           uid: currUserData["uid"],
           name: currUserData["name"],
+          keyName: currUserData["keyName"],
           email: currUserData["email"],
           photoUrl: currUserData["photoUrl"],
           status: currUserData["status"],
@@ -174,6 +177,7 @@ class AuthController extends GetxController {
     CollectionReference users = firestore.collection("users");
     users.doc(_currentUser?.email).update({
       "name": name,
+      "keyName": name.substring(0, 1).toUpperCase(),
       "status": status,
       "lastSignInTime":
           _userCredential?.user?.metadata.lastSignInTime?.toIso8601String(),
@@ -182,6 +186,7 @@ class AuthController extends GetxController {
 
     user.update((user) {
       user?.name = name;
+      user?.keyName = name.substring(0, 1).toUpperCase();
       user?.status = status;
       user?.lastSignInTime =
           _userCredential?.user?.metadata.lastSignInTime?.toIso8601String();

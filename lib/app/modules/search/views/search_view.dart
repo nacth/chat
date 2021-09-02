@@ -64,7 +64,7 @@ class SearchView extends GetView<SearchController> {
         preferredSize: Size.fromHeight(140),
       ),
       body: Obx(
-        () => controller.tempSearch.length == 0
+        () => controller.userSearch.length == 0
             ? Center(
                 child: Container(
                   width: Get.width * 0.7,
@@ -73,8 +73,12 @@ class SearchView extends GetView<SearchController> {
                 ),
               )
             : ListView.builder(
-                itemCount: controller.tempSearch.length,
+                itemCount: controller.userSearch.length,
                 itemBuilder: (context, index) => ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
                   leading: CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.black26,
@@ -84,11 +88,11 @@ class SearchView extends GetView<SearchController> {
                     ),
                   ),
                   title: Text(
-                    "${controller.tempSearch[index]["name"]}",
+                    "${controller.userSearch[index]["name"]}",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                   subtitle: Text(
-                    "${controller.tempSearch[index]["email"]}",
+                    "${controller.userSearch[index]["email"]}",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   trailing: GestureDetector(
