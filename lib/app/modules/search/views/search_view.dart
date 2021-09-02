@@ -1,3 +1,4 @@
+import 'package:chat/app/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -6,6 +7,7 @@ import 'package:chat/app/routes/app_pages.dart';
 import '../controllers/search_controller.dart';
 
 class SearchView extends GetView<SearchController> {
+  final authC = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +58,8 @@ class SearchView extends GetView<SearchController> {
                     ),
                   ),
                 ),
-                onChanged: (value) => controller.searchFriend(value),
+                onChanged: (value) =>
+                    controller.searchFriend(value, authC.user.value.email!),
               ),
             ),
           ),
